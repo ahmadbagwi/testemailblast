@@ -63,8 +63,6 @@ $sql = "SELECT post_date, post_title, guid FROM abdulhadi_kebudayaan.kbd_5_posts
 
 $result = $conn->query($sql);
 
-
-	$result;
 	if ($result->num_rows > 0) {
     // output data of each row
     	while($row = $result->fetch_assoc()) {
@@ -75,6 +73,9 @@ $result = $conn->query($sql);
     echo "0 results";
 	}
 
+	$informasi = '<br>Ikuti akun @budayasaya di Facebook, Twitter dan Instagram<br>';
+	$berhentilangganan = '<br>Untuk berhenti menerima email klik <a href="mailto:budayasaya@gmail.com?subject=stop%20email%20kebudayaan">disini</a>';
+	
 	$dataimplode = implode(" ",$simpandata);
 	if ($dataimplode!="") {
 		require ('vendor/phpmailer/phpmailer/PHPMailerAutoload.php');
@@ -97,7 +98,7 @@ $result = $conn->query($sql);
 	    $mail->Subject = 'Berita Kebudayaan';
 	    // Mengatur format email ke HTML
 	    $mail->isHTML(true);
-	    $mail->Body = $dataimplode;
+	    $mail->Body = $dataimplode.$informasi.$berhentilangganan;
 	    if(!$mail->send()){
 	        echo 'Pesan tidak dapat dikirim.';
 	        echo 'Mailer Error: ' . $mail->ErrorInfo;
