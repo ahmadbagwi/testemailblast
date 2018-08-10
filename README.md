@@ -1,4 +1,8 @@
 # wpemailblast
 Aplikasi sederhana mengirim email  dari website kebudayaan
 Versi perbaikan dari sebelumnya dengan query tambahan dan footer
-Ini yang fix setiap pembaharuan di commit kesini
+-Perubahana email penerima yang disimpan di tabel "penerima" pada database
+-Penambahan fitur form tambah penerima /tambah.php
+-Penambahan fitur unsubscribe /unsubscribe.php
+-Pemisahan file konfigurasi
+-Loop pengirima berdasarkan email penerima satu per satu dengan foreach
