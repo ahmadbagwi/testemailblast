@@ -6,7 +6,7 @@
 </head>
 <script type="text/javascript">
 	var tanya = prompt("Password?");
-if (tanya != "qwerty123456") {
+if (tanya != "q") {
     window.location.href="about:blank";
 } 
 </script>
@@ -14,7 +14,7 @@ if (tanya != "qwerty123456") {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	require ('konfig.php');
 	$mail = $_POST["email"];
-	$querysimpan = "INSERT INTO penerima (email) VALUES('$mail')";
+	$querysimpan = "INSERT INTO penerima (email, status) VALUES('$mail','1')";
 	$hasilsimpan = $conn->query($querysimpan);
 	if ($hasilsimpan) {
 		$info =  "Data berhasil disimpan";

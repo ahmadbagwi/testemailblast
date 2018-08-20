@@ -8,7 +8,7 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	require ('konfig.php');
 	$mail = $_POST["email"];
-	$queryhapus = "DELETE FROM penerima WHERE email = '$mail'";
+	$queryhapus = "UPDATE penerima SET status ='0' WHERE email = '$mail'";
 	$hasilhapus = $conn->query($queryhapus);
 	if ($hasilhapus) {
 		$info =  "Anda telah berhenti menerima email";

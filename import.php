@@ -4,12 +4,12 @@
 <head>
 	<title>Import CSV penerima email kebudayaan</title>
 </head>
-</html><?php/*<script type="text/javascript">
+</html><script type="text/javascript">
 	var tanya = prompt("Password?");
-if (tanya != "qwerty123456") {
+if (tanya != "q") {
     window.location.href="about:blank";
 } 
-</script>*/?>
+</script>
 <?php
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -3,14 +3,14 @@
 require ('konfig.php');
 
 // mengambil konten
-require ('konten.php');
-$konten = implode(" ",$simpandata);
+require ('body.php');
+//$konten = implode(" ",$simpandata);
 $footer = '<br>Ikuti akun @budayasaya di Facebook, Twitter dan Instagram
 			<br>Untuk berhenti menerima email klik 
-			<a href="mailto:budayasaya@gmail.com?subject=stop%20email%20kebudayaan">disini</a>';
+			<a href="https://kebudayaan.kemdikbud.go.id/unsubscribe.php">disini</a>';
 
 // mengambil penerima
-$querycari = "SELECT email FROM penerima";
+$querycari = "SELECT email FROM penerima WHERE status='1'";
 $hasilcari = $conn->query($querycari);
 
 if ($hasilcari->num_rows > 0) {
@@ -49,7 +49,7 @@ require ('vendor/phpmailer/phpmailer/class.smtp.php');
 		$mail->ClearAllRecipients();
 		$mail->AddAddress($penerima);
 		$mail->isHTML(true);
-		$mail->Body = /*$konten.$footer*/"Tes email aja dengan penerima dari array";
+		$mail->Body = $artikel.$footer/*"Tes email aja dengan penerima dari array"*/;
 			if(!$mail->send()){
 				echo 'Pesan tidak dapat dikirim.';
 				echo 'Mailer Error: ' . $mail->ErrorInfo;
