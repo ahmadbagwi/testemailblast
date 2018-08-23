@@ -1,5 +1,6 @@
 <?php
 //query sql memeriksa semua tabel main dan micro site
+//file ini tidak dipakai lagi, diganti dengan body.php menggunakan kueri wordpress yang lebih singkat dan tepat
 $sqlkonten = "SELECT post_date, post_title, guid FROM abdulhadi_kebudayaan.kbd_5_posts WHERE post_date_gmt LIKE '$hari%' AND post_status='publish' UNION
 		SELECT post_date, post_title, guid FROM abdulhadi_kebudayaan.kbd_6_posts WHERE post_date_gmt LIKE '$hari%' AND post_status='publish' UNION 
 		SELECT post_date, post_title, guid FROM abdulhadi_kebudayaan.kbd_7_posts WHERE post_date_gmt LIKE '$hari%' AND post_status='publish' UNION 

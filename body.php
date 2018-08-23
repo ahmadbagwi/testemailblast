@@ -25,10 +25,10 @@ if ( ! defined('ABSPATH') ) {
 	    	<!-- the loop -->
 	    		<?php while ( $wpb_all_query->have_posts() ) : $wpb_all_query->the_post(); 
 
-	      		 $judul = esc_html( get_the_title() );
-	      		 $blog = esc_html( get_bloginfo() );
-	      		 $waktu = get_the_date('Y-m-d');
-				 $konten = get_the_date('Y-m-d')." | ".get_bloginfo()." | ".'<a href="'.get_permalink().'">'.get_the_title().'</a></br>';
+	      		 //$judul = esc_html( get_the_title() );
+	      		 //$blog = esc_html( get_bloginfo() );
+	      		 //$waktu = get_the_date('Y-m-d');
+				 $konten = get_the_date('Y-m-d')." | ".get_bloginfo()." | ".'<a href="'.get_permalink().'">'.get_the_title()."</a><br>";
 				 $semuakonten[]=$konten
 	      		 ?>
 	    	<?php endwhile; ?>
@@ -39,4 +39,5 @@ if ( ! defined('ABSPATH') ) {
 	 	}
 
 $artikel = implode(" ",$semuakonten);
-//echo $artikel; ?>
+//var_dump($artikel); 
+//echo $artikel;?>

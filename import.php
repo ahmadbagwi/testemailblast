@@ -16,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	require ('konfig.php');
 	$filename=$_FILES["file"]["tmp_name"];		
 
-
 	if($_FILES["file"]["size"] > 0)
 	{
 		$file = fopen($filename, "r");
@@ -27,13 +26,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			if(!isset($result))
 			{
 				echo "<script type=\"text/javascript\">
-				alert(\"Invalid File:Please Upload CSV File.\");
+				alert(\"Gagal Import.\");
 				window.location = \"import.php\"
 				</script>";		
 			}
 			else {
 				echo "<script type=\"text/javascript\">
-				alert(\"CSV File has been successfully Imported.\");
+				alert(\"Berhasil Import\");
 				window.location = \"import.php\"
 				</script>";
 			}
