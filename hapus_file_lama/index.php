@@ -15,40 +15,11 @@ function wpemailblast_actions() {
      add_submenu_page('wp_emailblast', 'Hapus Email', 'Hapus Email', 'edit_pages', 'hapus_email', 'hapusemail' );
 }
 add_action('admin_menu', 'wpemailblast_actions');
+global $wpdb;
 
-/*$screen = get_current_screen();
-if( $screen == 'admin.php?page=wp_emailblast' ) {
-    wp_enqueue_style( 'bootstrapCSS', plugins_url( '/style/bootstrap.css', __FILE__ ) );    
-}
-*/
-function bootstrap_stylesheet() {
-    wp_enqueue_style( 'bootstrapCSS', plugins_url( '/style/bootstrap.css', __FILE__ ) );
-}
-global $plugin_page;
-if($plugin_page){
-//if (isset($_GET['page']) && ($_GET['page'] == 'admin.php?page=wp_emailblast')) { 
-	add_action('admin_print_styles', 'bootstrap_stylesheet');
-//}
-}
 function wpemailblast() { 
-	global $wpdb;
-	$total = $wpdb->get_row("SELECT COUNT(email) as mail FROM penerima");
-	$emailtidakaktif = $wpdb->get_row( "SELECT COUNT(email) as tidakaktif FROM penerima WHERE status='0'");
-	$emailaktif = $wpdb->get_row( "SELECT COUNT(email) as aktif FROM penerima WHERE status='1'");
-	
-	?>
-	<table class="table">
-		<tr>
-			<td>Total Email</td>
-			<td>Tidak Aktif</td>
-			<td>Aktif</td>
-		</tr>
-		<tr>
-			<td><?php echo $total->mail; ?></td>
-			<td><?php echo $emailtidakaktif->tidakaktif; ?></td>
-			<td><?php echo $emailaktif->aktif; ?></td>
-		</tr>
-	<?php
+	$jumlahpenerima = $wpdb->get_results( "SELECT COUNT (email) FROM penerima WHERE status='1'");
+	var_dump($jumlahpenerima);
 }
 
 function tambahemail() { ?>
@@ -58,29 +29,28 @@ function tambahemail() { ?>
 	</form>
 	<?php
 	if (isset($_POST['tambah'])) {
-		global $wpdb;
 		$mail = $_POST['email'];
-		$addemail = $wpdb->get_results("INSERT INTO penerima (email, status) VALUES('$mail','1')");
-		if ($wpdb->last_error) {
-			echo 'Gagal tambah email, harap periksa email'.$wpdb->last_error;
+		$addemail = $wpdb->get_results( "INSERT INTO penerima (email, status) VALUES('$mail','1')");
+		if ($addemail) {
+			echo "Sukses tambah email";
 		} else { 
-			echo "Sukses tambah email!";
+			echo "Gagal tambah email";
 		}
 	}
 }
 
 function importcsv() {
-	if (isset($_POST['importcsv'])) {
-		global $wpdb;
+	if (isset($_POST['import'])) {
 		$filename=$_FILES["file"]["tmp_name"];
 		if($_FILES["file"]["size"] > 0) {
 			$file = fopen($filename, "r");
 			while (($getData = fgetcsv($file, 10000, ",")) !== FALSE) {
-				$importemail = $wpdb->get_results("INSERT into penerima(email) values ('".$getData[0]."')");
-				if($wpdb->last_error) {
-					echo 'Gagal Import File'.$wpdb->last_error;		
+				$sql = "INSERT into penerima (email) values ('".$getData[0]."')";
+				$result = mysqli_query($conn, $sql);
+				if(!isset($result)) {
+					echo "Sukses import email";		
 				} else {
-					echo 'Sukses Import File';
+					echo "Gagal import email";
 				}
 			}
 			fclose($file);	
@@ -89,9 +59,9 @@ function importcsv() {
 	<form method="post" action="" enctype="multipart/form-data">
 		Pilih File CSV
 		<input type="file" name="file" id="file" class="input-large">
-		<button type="submit" name="importcsv" class="btn btn-primary">Import</button>
+		<button type="submit" name="import" class="btn btn-primary">Import</button>
 	</form>
-	<?php
+<?php	
 }
 
 function hapusemail() { ?>
@@ -101,13 +71,12 @@ function hapusemail() { ?>
 	</form>
 	<?php
 	if (isset($_POST['hapus'])) {
-		global $wpdb;
 		$mail = $_POST['email'];
 		$removeemail = $wpdb->get_results("UPDATE penerima SET status ='0' WHERE email = '$mail'");
-		if ($wpdb->last_error) {
-			echo 'Gagal hapus email'.$wpdb->last_error;
+		if ($removeemail) {
+			echo "Sukses hapus email";
 		} else { 
-			echo 'Sukses hapus email';
+			echo "Gagal hapus email";
 		}
 	}
 }
@@ -120,15 +89,13 @@ register_activation_hook(__FILE__, 'my_activation');
 function my_activation() {
     if (! wp_next_scheduled ( 'daily_email' )) {
 	//wp_schedule_event(time(), 'hourly', 'my_hourly_event');
-   	date_default_timezone_set("Asia/Jakarta");
-	wp_schedule_event( strtotime('2018-08-24 13:20:00'), 'daily', 'daily_email' );
+	wp_schedule_event( strtotime('10:20:00'), 'daily', 'daily_email' );
     }
 }
 
 add_action('daily_email', 'cronkirimemail');
 
 function cronkirimemail() {
-	global $wpdb;
 	$today = date("Y-m-d");
 	$blogs = get_last_updated();
 	foreach ($blogs AS $blog) {    
