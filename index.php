@@ -8,6 +8,7 @@
 * Author URI: https://localhost91.wordpress.com
 */
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+date_default_timezone_set("Asia/Jakarta");
 function wpemailblast_actions() {
      add_menu_page('WP Email Blast', 'WP Email Blast', 'edit_pages', 'wp_emailblast', 'wpemailblast', '', 86);
      add_submenu_page('wp_emailblast', 'Tambah Email', 'Tambah Email', 'edit_pages', 'tambah_email', 'tambahemail' );
@@ -113,7 +114,6 @@ register_activation_hook(__FILE__, 'my_activation');
 
 function my_activation() {
     if (! wp_next_scheduled ( 'email_kebudayaan' )) {
-   	date_default_timezone_set("Asia/Jakarta");
 	wp_schedule_event( strtotime('2018-08-24 16:10:00'), 'daily', 'email_kebudayaan' );
     }
 }
@@ -122,7 +122,6 @@ add_action('email_kebudayaan', 'cronkirimemail');
 
 function cronkirimemail() {
 	global $wpdb;
-	$today = date("Y-m-d");
 	$blogs = get_last_updated();
 	foreach ($blogs AS $blog) {    
 		switch_to_blog($blog["blog_id"]);
