@@ -16,20 +16,14 @@ function wpemailblast_actions() {
 }
 add_action('admin_menu', 'wpemailblast_actions');
 
-/*$screen = get_current_screen();
-if( $screen == 'admin.php?page=wp_emailblast' ) {
-    wp_enqueue_style( 'bootstrapCSS', plugins_url( '/style/bootstrap.css', __FILE__ ) );    
-}
-*/
 function bootstrap_stylesheet() {
     wp_enqueue_style( 'bootstrapCSS', plugins_url( '/style/bootstrap.css', __FILE__ ) );
 }
-global $plugin_page;
-if($plugin_page){
-//if (isset($_GET['page']) && ($_GET['page'] == 'admin.php?page=wp_emailblast')) { 
+
+if(($_GET['page'] == 'wp_emailblast') or ($_GET['page'] == 'tambah_email') or ($_GET['page'] == 'import_csv') or ($_GET['page'] == 'hapus_email')){
 	add_action('admin_print_styles', 'bootstrap_stylesheet');
-//}
 }
+
 function wpemailblast() { 
 	global $wpdb;
 	$total = $wpdb->get_row("SELECT COUNT(email) as mail FROM penerima");
@@ -118,14 +112,13 @@ add_shortcode('unsubscribe', 'hapusemail');
 register_activation_hook(__FILE__, 'my_activation');
 
 function my_activation() {
-    if (! wp_next_scheduled ( 'daily_email' )) {
-	//wp_schedule_event(time(), 'hourly', 'my_hourly_event');
+    if (! wp_next_scheduled ( 'email_kebudayaan' )) {
    	date_default_timezone_set("Asia/Jakarta");
-	wp_schedule_event( strtotime('2018-08-24 13:20:00'), 'daily', 'daily_email' );
+	wp_schedule_event( strtotime('2018-08-24 16:10:00'), 'daily', 'email_kebudayaan' );
     }
 }
 
-add_action('daily_email', 'cronkirimemail');
+add_action('email_kebudayaan', 'cronkirimemail');
 
 function cronkirimemail() {
 	global $wpdb;
@@ -213,5 +206,5 @@ function cronkirimemail() {
 register_deactivation_hook(__FILE__, 'my_deactivation');
 
 function my_deactivation() {
-	wp_clear_scheduled_hook('daily_email');
+	wp_clear_scheduled_hook('email_kebudayaan');
 }
