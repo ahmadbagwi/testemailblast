@@ -114,7 +114,7 @@ register_activation_hook(__FILE__, 'my_activation');
 
 function my_activation() {
     if (! wp_next_scheduled ( 'email_kebudayaan' )) {
-	wp_schedule_event( strtotime('2018-08-24 16:10:00'), 'daily', 'email_kebudayaan' );
+	wp_schedule_event( strtotime('06:05:00'), 'daily', 'email_kebudayaan' );
     }
 }
 
@@ -157,8 +157,8 @@ function cronkirimemail() {
 //footer
 	$footer = '<br>Ikuti akun @budayasaya di Facebook, Twitter dan Instagram
 	<br>Untuk berhenti menerima email klik 
-	<a href="https://kebudayaan.kemdikbud.go.id/unsubscribe.php">disini</a>';
-
+	<a href="https://kebudayaan.kemdikbud.go.id/stop-email-kebudayaan/">disini</a>';
+if ($artikel != NULL) {
 // mengambil penerima
 	$ambilemail = $wpdb->get_results( "SELECT email FROM penerima WHERE status='1'");
 	foreach ($ambilemail as $listemail) {
@@ -200,6 +200,7 @@ function cronkirimemail() {
 		}
 	}
 	$mail->SmtpClose();
+}
 }
 
 register_deactivation_hook(__FILE__, 'my_deactivation');
