@@ -33,18 +33,28 @@ function kirimemail() {
 	foreach ($blogs AS $blog) {    
 		switch_to_blog($blog["blog_id"]);
 		$today = getdate();
+		$today_args = array(
+    					'year' => $today['year'],
+   						'monthnum' => $today['mon'],
+    					'day' => $today['mday'] 
+		);
 		$args = array(
 			'post_type'         => 'post',
-			'post_status'       => 'publish',
-			'date_query'        => array(
-				array(
-					'year'  => $today['year'],
-					'month' => $today['mon'],
-					'day'   => $today['mday']
-				)
-			)
+			'post_status'       => 'publish'
 		);
-		$wpb_all_query = new WP_Query($args); ?>
+		$newargs =  array(
+        'post_type' => 'post',
+        'date_query' => array(
+          array(
+            'after' => 'Today',
+            'inclusive' => true,
+            )
+          ),
+        'post_status' => array(
+          'publish'
+          )
+        );
+		$wpb_all_query = new WP_Query($newargs); ?>
 		<?php if ( $wpb_all_query->have_posts() ) : ?>
 
 			<!-- the loop -->
