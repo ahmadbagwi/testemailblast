@@ -21,7 +21,7 @@ register_activation_hook(__FILE__, 'my_activation');
 
 function my_activation() {
     if (! wp_next_scheduled ( 'email_kebudayaan' )) {
-	wp_schedule_event( strtotime('06:05:00'), 'daily', 'email_kebudayaan' );
+	wp_schedule_event( strtotime('16:05:00'), 'daily', 'email_kebudayaan' );
     }
 }
 
@@ -32,7 +32,7 @@ function kirimemail() {
 	global $wpdb;
 	foreach ($blogs AS $blog) {    
 		switch_to_blog($blog["blog_id"]);
-		$today = getdate();
+		/*$today = getdate();
 		$today_args = array(
     					'year' => $today['year'],
    						'monthnum' => $today['mon'],
@@ -41,7 +41,7 @@ function kirimemail() {
 		$args = array(
 			'post_type'         => 'post',
 			'post_status'       => 'publish'
-		);
+		);*/
 		$newargs =  array(
         'post_type' => 'post',
         'date_query' => array(
