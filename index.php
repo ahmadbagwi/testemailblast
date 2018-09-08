@@ -59,7 +59,7 @@ function kirimemail() {
 
 			<!-- the loop -->
 			<?php while ( $wpb_all_query->have_posts() ) : $wpb_all_query->the_post(); 
-				$konten = get_the_date('Y-m-d')." | ".get_bloginfo()." | ".'<a href="'.get_permalink().'">'.get_the_title()."</a><br>";
+				$konten = get_the_date('Y-m-d')." | ".get_bloginfo()." | ".'<a href="'.get_permalink().'?utm_source=newsletter&utm_medium=email&utm_campaign=budayasaya'.'">'.get_the_title()."</a><br>";
 				$semuakonten[]=$konten
 				?>
 			<?php endwhile; ?>
