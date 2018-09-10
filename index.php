@@ -1,6 +1,6 @@
 <?php
 /**
-* Plugin Name: WP Email Blast
+* Plugin Name: Kirim Email Kebudayaan
 * Plugin URI: http://kdesain.com
 * Description: Mengirim artikel harian yang ditulis oleh setiap situs multisite setiap hari
 * Version: 0.1
@@ -10,10 +10,11 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 date_default_timezone_set("Asia/Jakarta");
 function wpemailblast_actions() {
-     add_menu_page('WP Email Blast', 'WP Email Blast', 'edit_pages', 'wp_emailblast', 'wpemailblast', '', 76);
+     add_menu_page('WP Email Blast', 'WP Email Blast', 'create_sites ', 'wp_emailblast', 'wpemailblast', '', 76);
      add_submenu_page('wp_emailblast', 'Tambah Email', 'Tambah Email', 'edit_pages', 'tambah_email', 'tambahemail' );
      add_submenu_page('wp_emailblast', 'Import CSV', 'Import CSV', 'edit_pages', 'import_csv', 'importcsv' );
      add_submenu_page('wp_emailblast', 'Hapus Email', 'Hapus Email', 'edit_pages', 'hapus_email', 'hapusemail' );
+     add_submenu_page('wp_emailblast', 'Manual Kirim Email', 'Kirim Email', 'edit_pages', 'kirimemail', 'kirimemail' );
 }
 add_action('admin_menu', 'wpemailblast_actions');
 
@@ -41,7 +42,7 @@ function kirimemail() {
 		$args = array(
 			'post_type'         => 'post',
 			'post_status'       => 'publish'
-		);*/
+		);
 		$newargs =  array(
         'post_type' => 'post',
         'date_query' => array(
@@ -54,7 +55,26 @@ function kirimemail() {
           'publish'
           )
         );
-		$wpb_all_query = new WP_Query($newargs); ?>
+		*/
+		$kemarin = date('F jS, Y',strtotime("-1 days"));
+        $yesterday_today = array(
+			'order' => 'ASC',
+			'orderby' => 'date',
+			'date_query' => array(
+				array(
+					'after'     => $kemarin, //'January 1st, 2013',
+					'before'    => array(
+						'year'  => date('Y'),
+						'month' => date('n'),
+						'day'   => date('j'),
+					),
+					'inclusive' => true,
+				),
+			),
+			'posts_per_page' => -1,
+		);
+
+		$wpb_all_query = new WP_Query($yesterday_today); ?>
 		<?php if ( $wpb_all_query->have_posts() ) : ?>
 
 			<!-- the loop -->
@@ -73,7 +93,7 @@ function kirimemail() {
 	$artikel = implode(" ",$semuakonten);
 
 	//footer
-	$footer = '<br>Ikuti akun @budayasaya di Facebook, Twitter dan Instagram
+	$konten = $artikel.'<br>Ikuti akun @budayasaya di Facebook, Twitter dan Instagram
 	<br>Untuk berhenti menerima email klik 
 	<a href="https://kebudayaan.kemdikbud.go.id/stop-email-kebudayaan/">disini</a>';
 	if ($artikel != NULL) {
@@ -85,9 +105,10 @@ function kirimemail() {
 		}
 		$subject = 'Berita Kebudayaan';
 		$headers = array('Content-Type: text/html; charset=UTF-8');
+		echo $artikel;
 		//kirim email dengan wp_mail() format html
 		foreach ($dataemail as $to) {
-			wp_mail( $to, $subject, $artikel, $headers ); 
+			wp_mail( $to, $subject, $konten, $headers ); 
 		}
 		/*fungsi kirim email dengan phpmailer
 		require ('vendor/phpmailer/phpmailer/PHPMailerAutoload.php');
